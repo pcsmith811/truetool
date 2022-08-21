@@ -159,12 +159,28 @@ fi
 [[ "$helmEnable" == "true" ]] && helmEnable
 [[ "$aptEnable" == "true" ]] && aptEnable
 [[ "$aptEnable" == "true" || "$helmEnable" == "true" ]] && exit
+[[ "$cmd" == "true" ]] && cmd_to_container && exit
 [[ "$listBackups" == "true" ]] && listBackups && exit
 [[ "$deleteBackup" == "true" ]] && deleteBackup && exit
 [[ "$dns" == "true" ]] && dns && exit
 [[ "$restore" == "true" ]] && restore && exit
 [[ "$mountPVC" == "true" ]] && mountPVC && exit
 [[ "$number_of_backups" -ge 1 ]] && backup
-[[ "$sync" == "true" ]] && sync
+if [[ "$number_of_backups" -ge 1 && "$sync" == "true" ]]; then # Run backup and sync at the same time
+    echo "🅃 🄰 🅂 🄺 🅂 :"
+    echo -e "-Backing up ix-applications Dataset\n-Syncing catalog(s)"
+    echo -e "This can take a LONG time, Please Wait For Both Output..\n\n"
+    sync &
+    backup
+    wait
+elif [["$number_of_backups" -ge 1 && -z "$sync" ]]; then # If only backup is true, run it
+    echo "🅃 🄰 🅂 🄺 :"
+    echo -e "-Backing up \"ix-applications\" Dataset\nPlease Wait..\n\n"
+    backup
+elif [[ "$sync" == "true" ]]; then # If only sync is true, run it
+    echo "🅃 🄰 🅂 🄺 :"
+    echo -e "Syncing Catalog(s)\nThis Takes a LONG Time, Please Wait..\n\n"
+    sync
+fi
 [[ "$update_all_apps" == "true" || "$update_apps" == "true" ]] && update_apps
 [[ "$prune" == "true" ]] && prune
