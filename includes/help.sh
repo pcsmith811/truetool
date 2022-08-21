@@ -11,6 +11,7 @@ echo "--list-backups | Prints a list of backups available"
 echo "--helm-enable | Enables Helm command access on SCALE"
 echo "--apt-enable | Enables Apt command access on SCALE"
 echo "--dns           | list all of your applications DNS names and their web ports"
+echo "--cmd           | Tool to open a shell for one of your applications"
 echo
 echo -e "${BWhite}Update Options${Color_Off}"
 echo "-U | Update all applications, ignores versions"
