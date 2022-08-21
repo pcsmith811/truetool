@@ -8,6 +8,12 @@ dir=$(basename "$SCRIPT_DIR")
 enableUpdate="true"
 targetRepo="https://github.com/truecharts/truetool.git"
 
+# Hardcode to always enable rollback
+rollback="true"
+
+# Hardcode update limit
+update_limit=$(nproc --all)
+
 # CD to the folder containing the script to ensure consistent runs
 cd "${SCRIPT_DIR}" || echo -e "ERROR: Something went wrong accessing the script directory"
 
@@ -159,7 +165,6 @@ fi
 [[ "$helmEnable" == "true" ]] && helmEnable
 [[ "$aptEnable" == "true" ]] && aptEnable
 [[ "$aptEnable" == "true" || "$helmEnable" == "true" ]] && exit
-[[ "$cmd" == "true" ]] && cmd_to_container && exit
 [[ "$listBackups" == "true" ]] && listBackups && exit
 [[ "$deleteBackup" == "true" ]] && deleteBackup && exit
 [[ "$dns" == "true" ]] && dns && exit
