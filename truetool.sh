@@ -38,6 +38,8 @@ source includes/title.sh
 source includes/update.sh
 # shellcheck source=includes/update_self.sh
 source includes/update_self.sh
+# shellcheck source=includes/cmd_to_container.sh
+source includes/cmd_to_container.sh
 
 #If no argument is passed, set flag to show menu
 if [[ -z "$*" || "-" == "$*" || "--" == "$*"  ]]; then
@@ -53,9 +55,12 @@ else
             help)
                   help="true"
                   ;;
-              dns)
-                  dns="true"
-                  ;;
+            dns)
+                dns="true"
+                ;;
+            cmd)
+                cmd="true"
+                ;;
             mount)
                   mountPVC="true"
                   ;;
@@ -165,6 +170,7 @@ fi
 [[ "$helmEnable" == "true" ]] && helmEnable
 [[ "$aptEnable" == "true" ]] && aptEnable
 [[ "$aptEnable" == "true" || "$helmEnable" == "true" ]] && exit
+[[ "$cmd" == "true" ]] && cmd_to_container && exit
 [[ "$listBackups" == "true" ]] && listBackups && exit
 [[ "$deleteBackup" == "true" ]] && deleteBackup && exit
 [[ "$dns" == "true" ]] && dns && exit
