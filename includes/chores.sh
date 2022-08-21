@@ -16,16 +16,21 @@ export -f aptEnable
 prune(){
 echo -e "${BWhite}Docker Prune${Color_Off}"
 echo "Pruning Docker Images..."
-docker image prune -af | grep "^Total" && echo -e "${IGreen}Docker Prune Successfull${Color_Off}" || echo "Docker Prune ${IRed}FAILED${Color_Off}"
-
-# TODO Switch to middleware prune on next release
-# midclt call container.prune '{"remove_unused_images": true, "remove_stopped_containers": true}' &> /dev/null && echo "Docker Prune completed"|| echo "Docker Prune ${IRed}FAILED${Color_Off}"
+cli -c ' app container config prune prune_options={"remove_unused_images": true, "remove_stopped_containers": true}' &> /dev/null && echo "Docker Prune completed" || echo "Docker Prune ${IRed}FAILED${Color_Off}"
 }
 export -f prune
 
 #
 sync(){
-echo -e "${BWhite}Starting Catalog Sync...${Color_Off}"
-cli -c 'app catalog sync_all' &> /dev/null && echo -e "${IGreen}Catalog sync complete${Color_Off}" || echo -e "${IRed}Catalog Sync Failed${Color_Off}"
+echo_sync+=("${BWhite}🅂 🅈 🄽 🄲${Color_Off}")
+cli -c 'app catalog sync_all' &> /dev/null && echo_sync+=("Catalog sync complete") || echo_sync+="${IRed}Catalog Sync Failed${Color_Off}"
+
+#Dump the echo_array, ensures all output is in a neat order.
+for i in "${echo_sync[@]}"
+do
+    echo -e "$i"
+done
+echo
+echo
 }
 export -f sync
